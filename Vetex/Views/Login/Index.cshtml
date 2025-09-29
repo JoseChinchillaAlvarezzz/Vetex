@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Vetex</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #2b9ed9; 
+            font-family: Arial, sans-serif;
+        }
+
+        .login-card {
+            background-color: #d9d9d9; 
+            border: 14px solid #2b9ed9; 
+            border-radius: 18px;
+            width: 1600px;
+            height: 800px;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        .login-content {
+            text-align: center; 
+            width: 60%; 
+        }
+
+            .login-content img {
+                width: 140px; 
+                margin-bottom: 20px;
+            }
+
+            .login-content h2 {
+                font-size: 26px;
+                font-style: italic;
+                font-weight: bold;
+                margin: 20px 0 10px;
+            }
+
+            .login-content input {
+                width: 80%;
+                padding: 16px;
+                margin: 12px 0 20px;
+                border: 1px solid #888;
+                border-radius: 25px;
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .login-content button {
+                background-color: #49b4e8;
+                border: none;
+                padding: 16px;
+                width: 50%;
+                font-size: 18px;
+                border-radius: 10px;
+                cursor: pointer;
+                color: white;
+                font-weight: bold;
+            }
+
+                .login-content button:hover {
+                    background-color: #318bbf;
+                }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="login-content">
+            <!-- Logo -->
+            <img src="~/images/logo-vetex.png" alt="Logo Vetex">
+
+            <form method="post">
+                <h2>Usuario</h2>
+                <input type="text" name="usuario" placeholder="Usuario" required>
+
+                <h2>Contraseña</h2>
+                <input type="password" name="contrasena" placeholder="Contraseña" required>
+
+                <br>
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
