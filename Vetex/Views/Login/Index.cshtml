@@ -79,9 +79,15 @@
     <div class="login-card">
         <div class="login-content">
             <!-- Logo -->
-            <img src="~/images/logo-vetex.png" alt="Logo Vetex">
+            <img src="~/images/Vetex-removebg-preview.png" alt="Logo Vetex">
 
-            <form method="post">
+            <form method="post" action="/Login/Index">
+                @Html.AntiForgeryToken()
+
+                @if (ViewBag.Error != null)
+                {
+                    <p style="color:#b00020;margin:0 0 10px 0">@ViewBag.Error</p>
+                }
                 <h2>Usuario</h2>
                 <input type="text" name="usuario" placeholder="Usuario" required>
 

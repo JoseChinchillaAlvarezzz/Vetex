@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+    var nombre = ViewBag.UsuarioNombre as string ?? "Usuario";
+}
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
@@ -49,8 +53,8 @@
 
     <div class="contenedor">
         <div class="panel">
-            <h1>Bienvenido José</h1>
-            <img src="images/logo-vetex.png" alt="Logo Vetex" />
+            <h1>Bienvenido @nombre</h1>
+            <img src="~/images/Vetex-removebg-preview.png" alt="Logo Vetex" />
             <div class="brand">Vetex</div>
         </div>
     </div>
