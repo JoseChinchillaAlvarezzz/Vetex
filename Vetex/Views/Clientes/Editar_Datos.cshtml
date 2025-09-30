@@ -1,0 +1,128 @@
+﻿@{
+    ViewData["Title"] = "Edición de datos de dueño";
+    Layout = "_Layout";  // quítala si no usas layout
+}
+
+<style>
+    body {
+        background-color: #3d90b7;
+    }
+
+    .frame {
+        background: #dedede;
+        border-radius: 20px;
+        padding: 32px 28px 48px;
+        margin: 28px auto 40px;
+        max-width: 980px;
+        position: relative;
+    }
+
+    .page-title {
+        color: #3d90b7;
+        font-weight: 700;
+        font-size: 2.2rem;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .section-title {
+        font-weight: 700;
+        text-align: center;
+        margin: 6px 0 18px;
+    }
+
+    .logo {
+        position: absolute;
+        top: 16px;
+        right: 24px;
+        width: 64px;
+        height: auto;
+    }
+
+    .form-label {
+        font-weight: 500;
+        font-size: .95rem;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        background: #fff;
+    }
+
+    .btn-lgx {
+        padding: 12px 28px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-radius: 12px;
+        min-width: 150px;
+    }
+
+    .btn-primary {
+        background-color: #3d90b7;
+        border-color: #3d90b7;
+    }
+
+        .btn-primary:hover {
+            background-color: #327596;
+            border-color: #327596;
+        }
+
+    .actions {
+        gap: 18px;
+    }
+</style>
+
+<!-- Si tu _Layout no incluye Bootstrap, descomenta:
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+-->
+
+<div class="container frame">
+    <!-- Logo (cambia la ruta a tu archivo) -->
+    <img src="~/img/logo.png" alt="Vetex" class="logo" />
+
+    <h1 class="page-title">Edición de datos de dueño</h1>
+    <div class="section-title">Informacion del dueño</div>
+
+    @* Cuando conectes DB:
+     @model DuenoVM
+     <form asp-action="Edit" method="post">
+     y cambia los inputs por <input asp-for="Nombre" ... />
+  *@
+    <form action="#" method="post" novalidate>
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-8">
+                <label class="form-label" for="Nombre">Nombre:</label>
+                <input class="form-control" id="Nombre" name="Nombre" type="text" placeholder="Juan Perez" />
+            </div>
+
+            <div class="col-12 col-md-8">
+                <label class="form-label" for="Telefono">Telefono:</label>
+                <input class="form-control" id="Telefono" name="Telefono" type="text" placeholder="2334-8878" />
+            </div>
+
+            <div class="col-12 col-md-8">
+                <label class="form-label" for="Dui">DUI:</label>
+                <input class="form-control" id="Dui" name="Dui" type="text" placeholder="06668409-3" />
+            </div>
+
+            <div class="col-12 col-md-8">
+                <label class="form-label" for="Correo">Correo electronico:</label>
+                <input class="form-control" id="Correo" name="Correo" type="email" placeholder="juanito.perez26@gmail.com" />
+            </div>
+
+            <div class="col-12 col-md-8">
+                <label class="form-label" for="Direccion">Dirección:</label>
+                <input class="form-control" id="Direccion" name="Direccion" type="text" placeholder="1Av Norte Entre 8 y 10 Calle Oriente" />
+            </div>
+
+            <div class="col-12 d-flex justify-content-center actions mt-2">
+                <button type="submit" class="btn btn-primary btn-lgx">Guardar</button>
+                <a href="~/Mascotas/Create" class="btn btn-primary btn-lgx">Añadir mascota</a>
+                @* cuando tengas rutas reales, cambia el href por asp-action/asp-controller:
+           <a asp-controller="Mascotas" asp-action="Create" asp-route-duenoId="@Model.Id" class="btn btn-primary btn-lgx">Añadir mascota</a>
+        *@
+            </div>
+        </div>
+    </form>
+</div>
