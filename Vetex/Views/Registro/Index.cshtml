@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Registros Clínicos";
+    Layout = null;  /* quita esta línea si quieres usar _Layout */
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"]</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body{background:#2b90b6;}
+        .card-wrap{
+            max-width:900px;margin:30px auto;background:#e3e3e3;border-radius:14px;
+            padding:28px;box-shadow:0 2px 6px rgba(0,0,0,.15)
+        }
+        .btn-vetex{background:#5aa9e6;border:none}
+        .btn-vetex:hover{filter:brightness(.95)}
+        .logo{width:70px}
+        .title{font-weight:700;margin-top:8px}
+    </style>
+</head>
+<body>
+    <div class="card-wrap text-center">
+        <img class="logo mb-2" src="~/images/vetex_logo.png" onerror="this.style.display='none'" />
+        <div class="title mb-4">Vetex</div>
+        <h5 class="fw-semibold mb-4">Registros Clínicos</h5>
+        <div class="d-flex gap-3 justify-content-center">
+            <a class="btn btn-vetex px-4" asp-controller="Registro" asp-action="List">Ver registros</a>
+            <a class="btn btn-vetex px-4" asp-controller="Registro" asp-action="Create">Registro nuevo</a>
+        </div>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

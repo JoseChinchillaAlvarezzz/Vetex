@@ -1,0 +1,127 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Registro Clínico Completo</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #2b90b6;
+        }
+
+        .panel {
+            max-width: 1000px;
+            background: #e3e3e3;
+            margin: 24px auto;
+            border-radius: 14px;
+            padding: 18px
+        }
+
+        .field {
+            background: #f3f3f3;
+            border-radius: 6px;
+            padding: .45rem .6rem
+        }
+
+        .label {
+            width: 200px
+        }
+
+        .row + .row {
+            margin-top: .6rem
+        }
+
+        .btn-closex {
+            background: #5aa9e6;
+            border: none;
+            padding: .5rem 1.6rem
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PANEL DETALLE -->
+    <div class="panel">
+        <h5 class="fw-semibold mb-1">Registro Clínico</h5>
+        <div class="text-muted mb-3">Maria Lopez – Toby</div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Reseña:</div>
+            <div class="col">
+                <div class="field">Paciente canino, 2 años, historial de vacunas incompleto.</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Motivo:</div>
+            <div class="col">
+                <div class="field">Tos frecuente y falta de apetito desde hace 3 días.</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Examen físico:</div>
+            <div class="col">
+                <div class="field" style="white-space:pre-line">
+                    Temperatura: 39.5°C
+                    Pulso: 120 lpm
+                    Respiración: 35 rpm
+                    Mucosas: ligeramente pálidas
+                    Hidratación: leve deshidratación
+                    Zona afectada: pulmones
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Diagnóstico:</div>
+            <div class="col">
+                <input class="form-control form-control-sm" value="Neumonía canina" readonly />
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-4 label fw-semibold">Evaluación general:</div>
+            <div class="col">
+                <div class="field" style="white-space:pre-line">
+                    Paciente canino con signos de dificultad respiratoria,
+                    temperatura elevada y tos persistente.
+                    Buen estado de ánimo general pese a la afección.
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-4 label fw-semibold">Tratamiento:</div>
+            <div class="col">
+                <div class="field" style="white-space:pre-line">
+                    Antibióticos de amplio espectro.
+                    Antiinflamatorios no esteroideos.
+                    Nebulizaciones dos veces al día.
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4 label fw-semibold">Indicación:</div>
+            <div class="col">
+                <div class="field" style="white-space:pre-line">
+                    Reposo en casa, hidratación constante
+                    y control de temperatura cada 12 horas.
+                    Acudir a control en 5 días.
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="#" class="btn btn-closex">Cerrar</a>
+        </div>
+    </div>
+
+   
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
