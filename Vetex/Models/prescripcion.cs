@@ -12,5 +12,6 @@ namespace Vetex.Models
         public int frecuencia_id { get; set; }
         public string duracion { get; set; }
         public string indicacion { get; set; }
+        public int cantidad { get; set; } 
     }
 }

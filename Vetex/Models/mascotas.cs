@@ -6,6 +6,7 @@ namespace Vetex.Models
     {
         [Key]
         public int id { get; set; }
+        public string nombre { get; set; }
         public int dueno_id { get; set; }
         public int especie_id { get; set; }
         public string? raza { get; set; }

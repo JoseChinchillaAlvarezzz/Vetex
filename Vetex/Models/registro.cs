@@ -14,6 +14,6 @@ namespace Vetex.Models
         public int respiracion_id { get; set; }
         public int deshidratacion_id { get; set; }
         public string diagnostico { get; set; }
-        public bool pagadoaqui { get; set; }
+        public bool? pagadoaqui { get; set; }
     }
 }

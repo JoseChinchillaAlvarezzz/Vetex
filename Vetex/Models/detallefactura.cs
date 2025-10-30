@@ -8,6 +8,6 @@ namespace Vetex.Models
         public int id { get; set; }
         public int factura_id { get; set; }
         public int prescripcion_id { get; set; }
-        public string subtotal { get; set; }
+        public decimal subtotal { get; set; }
     }
 }
