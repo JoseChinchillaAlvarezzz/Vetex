@@ -6,11 +6,12 @@ namespace Vetex.Models
     {
         [Key]
         public int id { get; set; }
+        public string nombre { get; set; }
         public int dueno_id { get; set; }
         public int especie_id { get; set; }
         public string? raza { get; set; }
         public int sexo_id { get; set; }
-        public int edad { get; set; }
+        public DateTime fecha_nacimiento { get; set; }
         public int peso { get; set; }
     }
 }

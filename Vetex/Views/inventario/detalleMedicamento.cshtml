@@ -1,0 +1,69 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Actualizar Stock";
+    var medicamento = (dynamic)ViewData["medicamento"];
+}
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewData["Title"] - Vetex</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body class="pt-5" style="background-color:#3D90B9">
+
+        <div class="d-flex flex-column" style="background-color:#D9D9D9; height: calc(100vh - 3rem); overflow-y:auto;">
+
+            <h2 class="text-center mt-3">Actualización de inventario</h2>
+
+            <div class="mx-5">
+                <h4 class="ms-5 ps-3">Medicamento</h4>
+                <div class="d-flex align-items-center bg-secondary-subtle mx-5 py-1 mb-3 border border-dark border-2">
+                    <h6 class="ps-3 pt-2">@medicamento.nombre</h6>
+                </div>
+            </div>
+
+            <div class="mx-5">
+                <h4 class="ms-5 ps-3">Presentación</h4>
+                <div class="d-flex align-items-center bg-secondary-subtle mx-5 py-1 mb-3 border border-dark border-2">
+                    <h6 class="ps-3 pt-2">@medicamento.presentacion</h6>
+                </div>
+            </div>
+
+            <div class="mx-5">
+                <h4 class="ms-5 ps-3">Stock actual</h4>
+                <div class="d-flex align-items-center bg-secondary-subtle mx-5 py-1 mb-3 border border-dark border-2">
+                    <h6 class="ps-3 pt-2">@medicamento.stock</h6>
+                </div>
+            </div>
+
+            <div class="mx-5 mb-3">
+                <h5 class="mx-5 my-3"><b>Nota: </b>Se debe ingresar la cantidad de <b>tratamientos</b> que se van a agregar al stock del 
+                                   medicamento seleccionado.<br />
+                                   <br /> Cada tratamiento corresponde a la unidad mínima que se entrega a un paciente. (Ej: Blister, Frasco)
+                </h5>
+
+            </div>
+
+            @using (Html.BeginForm("actualizarStock", "inventario", FormMethod.Post, new { onsubmit = "return confirm('¿Confirma la actualización de stock?');" }))
+            {
+                <input type="hidden" name="idMedicamento" value="@medicamento.id" />
+
+                <div class="mx-5 mb-3">
+                    <h4 class="ms-5 ps-3">Unidades a sumar</h4>
+                    <div class="d-flex align-items-center bg-light mx-5 mb-3 border border-2">
+                        <input type="number" name="stockSumar" id="stockSumar" class="form-control flex-grow-1"
+                           style="border: 3px solid #3D90B9" min="1" step="1" required />
+                    </div>              
+                </div>
+
+                <div class="d-flex justify-content-center mt-2">
+                    <button class="btn btn-lg text-light text-center ms-5" style="background-color:#3D90B9">Actualizar stock</button>
+                </div>
+            }
+
+        </div>
+    </body>
+</html>

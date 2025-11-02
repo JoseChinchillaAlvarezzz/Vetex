@@ -1,0 +1,75 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Prescripciones";
+    var detalleCliente = (dynamic)ViewData["datosCliente"];
+    decimal total = 0;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Vetex</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="pt-5" style="background-color:#3D90B9">
+
+    <div class="d-flex flex-column" style="background-color:#D9D9D9; height: calc(100vh - 3rem);">
+
+        <div class="d-flex justify-content-center pt-3">
+            <h1 class="me-3">Consulta #@detalleCliente.idRegistro</h1>
+            <img src="@Url.Content("~/images/Vetex-removebg-preview.png")" alt="Vetex" class="text-center ms-3" style="width:60px;" />
+        </div>
+
+        <div class="d-flex justify-content-center mt-2">
+            <h4 class="me-3"><b>Cliente: </b>@detalleCliente.dueno</h4>
+            <h4 class="ms-3"><b>Mascota: </b>@detalleCliente.mascota</h4>
+        </div>
+
+        <div class="mx-5 mt-4 d-flex justify-content-around">
+            <span class="d-flex align-items-center ms-5 ps-5 pb-1"><b>Medicamento</b></span>
+            <span class="d-flex align-items-center pb-1"><b>Cantidad</b></span>
+            <span class="d-flex align-items-center pb-1 ps-2"><b>Precio</b></span>
+            <span class="d-flex align-items-center me-5 pe-5"><b>Subtotal</b></span>
+        </div>
+
+        <div class="mx-5 mb-3 overflow-auto">
+            @foreach (var prescripcion in (IEnumerable<dynamic>)ViewData["prescripciones"])
+            {
+                <div class="mx-5">
+                    <div class="d-flex justify-content-around bg-light mx-5 py-2 mb-3 border border-dark border-2">
+                        <span class="d-flex align-items-center ps-2 pb-1">@prescripcion.medicamento</span>
+                        <span class="d-flex align-items-center ms-5 ps-2 pb-1">@prescripcion.cantidad</span>
+                        <span class="d-flex align-items-center ms-5 ps-1 pb-1">$@prescripcion.precio</span>
+                        <span class="d-flex align-items-center ps-2">$@prescripcion.total.ToString("F2")</span>
+                    </div>
+                </div>
+                total += prescripcion.total;
+            }
+
+            <h4 class="text-end mt-3 me-5 pe-5"><span class="me-5 pe-3"><b>Total: </b>$@total.ToString("F2")</span></h4>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            @using (Html.BeginForm("Pago", "inventario", FormMethod.Post, new { onsubmit = "return confirm('¿Confirma que la factura fue pagada aquí?');" }))
+            {
+                <input type="hidden" name="idRegistro" value="@detalleCliente.idRegistro" />
+                <input type="hidden" name="pagadoAqui" value="true" />
+                <input type="hidden" name="idDueno" value="@detalleCliente.idDueno" />
+                <input type="hidden" name="total" value="@total" />
+                <button class="btn text-light me-5" style="background-color:#3D90B9">Pagar aquí</button>
+            }
+
+            @using (Html.BeginForm("Pago", "inventario", FormMethod.Post, new { onsubmit = "return confirm('¿Confirma que la factura no será pagada aquí?');" }))
+            {
+                <input type="hidden" name="idRegistro" value="@detalleCliente.idRegistro" />
+                <input type="hidden" name="pagadoAqui" value="false" />
+                <button class="btn text-light ms-5" style="background-color:#3D90B9">No pagar</button>
+            }
+        </div>
+
+    </div>
+
+    </body>
+</html>
