@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Vetex.Models.RegistroDetalleVM
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -27,7 +28,7 @@
         }
 
         .label {
-            width: 200px
+            width: 220px
         }
 
         .row + .row {
@@ -39,89 +40,74 @@
             border: none;
             padding: .5rem 1.6rem
         }
+
+        .pill {
+            background: #eef6ff;
+            border-radius: 10px;
+            padding: .35rem .6rem;
+            margin-bottom: .35rem
+        }
     </style>
 </head>
 <body>
-
-    <!-- PANEL DETALLE -->
     <div class="panel">
         <h5 class="fw-semibold mb-1">Registro Clínico</h5>
-        <div class="text-muted mb-3">Maria Lopez – Toby</div>
+        <div class="text-muted mb-3">@Model.Dueno – @Model.Mascota (Reg. #@Model.RegistroId)</div>
 
         <div class="row">
             <div class="col-md-3 label fw-semibold">Reseña:</div>
-            <div class="col">
-                <div class="field">Paciente canino, 2 años, historial de vacunas incompleto.</div>
-            </div>
+            <div class="col"><div class="field">@Model.Resena</div></div>
         </div>
 
         <div class="row">
             <div class="col-md-3 label fw-semibold">Motivo:</div>
-            <div class="col">
-                <div class="field">Tos frecuente y falta de apetito desde hace 3 días.</div>
-            </div>
+            <div class="col"><div class="field">@Model.Motivo</div></div>
         </div>
 
         <div class="row">
-            <div class="col-md-3 label fw-semibold">Examen físico:</div>
+            <div class="col-md-3 label fw-semibold">Signos:</div>
             <div class="col">
                 <div class="field" style="white-space:pre-line">
-                    Temperatura: 39.5°C
-                    Pulso: 120 lpm
-                    Respiración: 35 rpm
-                    Mucosas: ligeramente pálidas
-                    Hidratación: leve deshidratación
-                    Zona afectada: pulmones
+                    Temperatura: @Model.Temperatura °C
+                    Pulso: @Model.Pulso
+                    Respiración: @Model.Respiracion
+                    Deshidratación: @Model.Deshidratacion
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-3 label fw-semibold">Diagnóstico:</div>
-            <div class="col">
-                <input class="form-control form-control-sm" value="Neumonía canina" readonly />
-            </div>
+            <div class="col"><div class="field">@Model.Diagnostico</div></div>
         </div>
-        <div class="row mb-2">
-            <div class="col-md-4 label fw-semibold">Evaluación general:</div>
+
+        <div class="row mt-3">
+            <div class="col-md-3 label fw-semibold">Prescripciones:</div>
             <div class="col">
-                <div class="field" style="white-space:pre-line">
-                    Paciente canino con signos de dificultad respiratoria,
-                    temperatura elevada y tos persistente.
-                    Buen estado de ánimo general pese a la afección.
-                </div>
+                @if (Model.Prescripciones.Any())
+                {
+                    @foreach (var p in Model.Prescripciones)
+                    {
+                        <div class="pill d-flex justify-content-between align-items-center">
+                            <span>@p.Medicamento — @p.Frecuencia</span>
+                            <b>@p.Cantidad u.</b>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-muted">Sin prescripciones.</div>
+                }
             </div>
         </div>
 
-        <div class="row mb-2">
-            <div class="col-md-4 label fw-semibold">Tratamiento:</div>
-            <div class="col">
-                <div class="field" style="white-space:pre-line">
-                    Antibióticos de amplio espectro.
-                    Antiinflamatorios no esteroideos.
-                    Nebulizaciones dos veces al día.
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-4 label fw-semibold">Indicación:</div>
-            <div class="col">
-                <div class="field" style="white-space:pre-line">
-                    Reposo en casa, hidratación constante
-                    y control de temperatura cada 12 horas.
-                    Acudir a control en 5 días.
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center">
-            <a href="#" class="btn btn-closex">Cerrar</a>
+        <div class="text-center mt-3">
+            <a class="btn btn-closex"
+               asp-action="History"
+               asp-route-duenoId="@Model.DuenoId"
+               asp-route-mascotaId="@Model.MascotaId">Cerrar</a>
         </div>
     </div>
-
-   
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

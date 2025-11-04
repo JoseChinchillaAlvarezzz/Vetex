@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Vetex.Models.HistorialVM
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -16,12 +17,12 @@
             max-width: 1000px;
             background: #e3e3e3;
             margin: 24px auto;
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 18px
         }
 
         .box {
-            background: white;
+            background: #fff;
             border-radius: 12px;
             padding: 12px
         }
@@ -35,63 +36,37 @@
 <body>
     <div class="panel">
         <h5 class="fw-semibold">Registro Clínico</h5>
-        <div class="text-muted mb-3">Maria Lopez – Toby</div>
+        <div class="text-muted mb-3">@Model.Dueno – @Model.Mascota</div>
 
         <div class="mb-2 fw-semibold">Historial</div>
         <div class="box">
-            <!-- Registro 1 -->
-            <div class="row align-items-center py-2">
-                <div class="col-md-3">Registro 25</div>
-                <div class="col-md-3">20/01/2025</div>
-                <div class="col-md-4">Neumonía</div>
-                <div class="col-md-2 text-end">
-                    <a class="btn btn-sm btn-ver" href="#">Ver</a>
-                </div>
-            </div>
-            <hr class="my-2" />
+            @if (Model.Registros.Any())
+            {
+                @foreach (var r in Model.Registros)
+                {
+                    <div class="row align-items-center py-2">
+                        <div class="col-md-3">Registro @r.RegistroId</div>
+                        <div class="col-md-3">@((r.Fecha?.ToString("dd/MM/yyyy")))</div>
+                        <div class="col-md-4">@r.Diagnostico</div>
+                        <div class="col-md-2 text-end">
+                            <a class="btn btn-sm btn-ver"
+                               asp-action="Details"
+                               asp-route-id="@r.RegistroId"
+                               asp-route-duenoId="@Model.DuenoId"
+                               asp-route-mascotaId="@Model.MascotaId">Ver</a>
+                        </div>
+                    </div>
+                    <hr class="my-2" />
+                }
+            }
+            else
+            {
+                <div class="text-muted">Sin registros.</div>
+            }
+        </div>
 
-            <!-- Registro 2 -->
-            <div class="row align-items-center py-2">
-                <div class="col-md-3">Registro 42</div>
-                <div class="col-md-3">25/02/2025</div>
-                <div class="col-md-4">Parvovirosis</div>
-                <div class="col-md-2 text-end">
-                    <a class="btn btn-sm btn-ver" href="#">Ver</a>
-                </div>
-            </div>
-            <hr class="my-2" />
-
-            <!-- Registro 3 -->
-            <div class="row align-items-center py-2">
-                <div class="col-md-3">Registro 71</div>
-                <div class="col-md-3">17/04/2025</div>
-                <div class="col-md-4">Moquillo canino</div>
-                <div class="col-md-2 text-end">
-                    <a class="btn btn-sm btn-ver" href="#">Ver</a>
-                </div>
-            </div>
-            <hr class="my-2" />
-
-            <!-- Registro 4 -->
-            <div class="row align-items-center py-2">
-                <div class="col-md-3">Registro 98</div>
-                <div class="col-md-3">30/05/2025</div>
-                <div class="col-md-4">Leptospirosis</div>
-                <div class="col-md-2 text-end">
-                    <a class="btn btn-sm btn-ver" href="#">Ver</a>
-                </div>
-            </div>
-            <hr class="my-2" />
-
-            <!-- Registro 5 -->
-            <div class="row align-items-center py-2">
-                <div class="col-md-3">Registro 156</div>
-                <div class="col-md-3">25/06/2025</div>
-                <div class="col-md-4">Rabia</div>
-                <div class="col-md-2 text-end">
-                    <a class="btn btn-sm btn-ver" href="#">Ver</a>
-                </div>
-            </div>
+        <div class="mt-3">
+            <a class="btn btn-link" asp-action="List">← Volver</a>
         </div>
     </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

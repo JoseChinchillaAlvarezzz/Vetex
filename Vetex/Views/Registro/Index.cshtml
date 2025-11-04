@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Registros Clínicos";
-    Layout = null;  /* quita esta línea si quieres usar _Layout */
+    Layout = null; 
 }
 <!DOCTYPE html>
 <html>
@@ -21,6 +21,15 @@
     </style>
 </head>
 <body>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show text-center fw-semibold" role="alert"
+             style="max-width:600px;margin:20px auto;border-radius:10px;">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <div class="card-wrap text-center">
         <img class="logo mb-2" src="~/images/vetex_logo.png" onerror="this.style.display='none'" />
         <div class="title mb-4">Vetex</div>
@@ -31,5 +40,15 @@
         </div>
     </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 3000); // 3 segundos
+    </script>
+
 </body>
 </html>
