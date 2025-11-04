@@ -1,0 +1,269 @@
+﻿@model Vetex.Models.duenos
+@{
+    Layout = null;
+    ViewData["Title"] = "Editar dueño";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        :root {
+            --bg: #3A869F;
+            --panel: #e6e6e6;
+            --title: #3A869F;
+            --txt: #2e3d47;
+            --btn: #3d7df2;
+            --btn-hover: #2d6be0;
+            --btn2: #2c91b8;
+            --btn2-hover: #227e9f;
+            --shadow: 0 10px 32px rgba(0,0,0,.12);
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Segoe UI, Roboto, Arial, sans-serif;
+            color: var(--txt);
+            background: var(--bg);
+        }
+
+        .container {
+            min-height: 100vh; 
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 48px 16px; 
+            box-sizing: border-box;
+        }
+
+        .card {
+            width: 960px;
+            max-width: 100%;
+            background: var(--panel);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 26px 34px 40px;
+            position: relative;
+        }
+
+        .brand-top {
+            position: absolute;
+            right: 20px;
+            top: 16px;
+        }
+
+            .brand-top img {
+                height: 42px;
+                display: block;
+            }
+
+        .title {
+            text-align: center;
+            font-size: 40px;
+            font-weight: 800;
+            margin: 6px 0 6px;
+            color: var(--title);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-weight: 600;
+            margin: 0 0 18px;
+        }
+
+        .form {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        input[type=text], input[type=tel] {
+            width: 100%;
+            height: 42px;
+            border-radius: 8px;
+            border: 1px solid #cfcfcf;
+            background: #fff;
+            padding: 8px 12px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .btn {
+            border: none;
+            height: 46px;
+            min-width: 160px;
+            padding: 0 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 3px 0 rgba(0,0,0,.25);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .btn-save {
+            background: var(--btn);
+        }
+
+            .btn-save:hover {
+                background: var(--btn-hover);
+            }
+
+        .btn-add {
+            background: var(--btn2);
+        }
+
+            .btn-add:hover {
+                background: var(--btn2-hover);
+            }
+
+        .text-danger {
+            color: #b33a3a;
+        }
+
+        .input-error {
+            border: 2px solid #b33a3a !important;
+            background-color: #ffeaea !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="brand-top">
+                <img src="~/images/Vetex-removebg-preview.png" alt="Vetex" />
+            </div>
+
+            <h1 class="title">Edición de datos de dueño</h1>
+            <p class="subtitle">Información del dueño</p>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <form class="form" asp-action="Editar_Datos" method="post" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="id" />
+
+                <div class="group">
+                    <label asp-for="nombre">Nombre:</label>
+                    <input asp-for="nombre" type="text" required />
+                    <span asp-validation-for="nombre" class="text-danger"></span>
+                </div>
+
+                <div class="group">
+                    <label asp-for="telefono">Teléfono:</label>
+                    <input asp-for="telefono"
+                           type="tel"
+                           inputmode="numeric"
+                           maxlength="9"
+                           pattern="^\d{4}-\d{4}$"
+                           title="Formato requerido: 7299-7039"
+                           placeholder="0000-0000"
+                           data-format="phone"
+                           required />
+                    <span asp-validation-for="telefono" class="text-danger"></span>
+                </div>
+
+                <div class="group">
+                    <label asp-for="dui">DUI:</label>
+                    <input asp-for="dui"
+                           type="text"
+                           inputmode="numeric"
+                           maxlength="10"
+                           pattern="^\d{8}-\d$"
+                           title="Formato requerido: 01234567-8"
+                           placeholder="00000000-0"
+                           data-format="dui"
+                           required />
+                    <span asp-validation-for="dui" class="text-danger"></span>
+                </div>
+
+                <div class="group">
+                    <label asp-for="direccion">Dirección:</label>
+                    <input asp-for="direccion" type="text" required />
+                    <span asp-validation-for="direccion" class="text-danger"></span>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-save">Guardar</button>
+                    <a class="btn btn-add" asp-action="Agregar_Mascota" asp-route-duenoId="@Model.id">Agregar mascota</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function formatWithHyphen(el, cutIndex, maxDigits) {
+            const digits = el.value.replace(/\D/g, '').slice(0, maxDigits);
+            el.value = digits.length > cutIndex
+                ? digits.slice(0, cutIndex) + '-' + digits.slice(cutIndex)
+                : digits;
+        }
+
+        const form = document.querySelector("form");
+
+        form.querySelectorAll('input[data-format="phone"]').forEach(inp => {
+            inp.addEventListener('input', () => formatWithHyphen(inp, 4, 8));
+            inp.addEventListener('blur', () => {
+                if (!/^\d{4}-\d{4}$/.test(inp.value))
+                    inp.setCustomValidity('Formato requerido: 7299-7039');
+                else inp.setCustomValidity('');
+            });
+            inp.addEventListener('focus', () => inp.setCustomValidity(''));
+        });
+
+        form.querySelectorAll('input[data-format="dui"]').forEach(inp => {
+            inp.addEventListener('input', () => formatWithHyphen(inp, 8, 9));
+            inp.addEventListener('blur', () => {
+                if (!/^\d{8}-\d$/.test(inp.value))
+                    inp.setCustomValidity('Formato requerido: 01234567-8');
+                else inp.setCustomValidity('');
+            });
+            inp.addEventListener('focus', () => inp.setCustomValidity(''));
+        });
+
+        form.addEventListener("submit", function (e) {
+            let valid = true;
+            let messages = [];
+
+            this.querySelectorAll("input[required]").forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    messages.push(`• ${input.previousElementSibling.innerText.replace(':','')}`);
+                    input.classList.add("input-error");
+                } else {
+                    input.classList.remove("input-error");
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+                alert("⚠️ Debe completar todos los campos obligatorios:\n\n" + messages.join("\n"));
+            }
+        });
+    </script>
+</body>
+</html>

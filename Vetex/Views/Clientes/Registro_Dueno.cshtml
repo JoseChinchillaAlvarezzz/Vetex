@@ -1,0 +1,249 @@
+﻿@model Vetex.Models.duenos
+@{
+    Layout = null;
+    ViewData["Title"] = "Registro de dueño";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            font-family: Segoe UI, Roboto, Arial, sans-serif;
+        }
+
+        .bg-cover {
+            background: #3A869F;
+            min-height: 100vh; 
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            padding: 36px 0 50px;
+            box-sizing: border-box;
+        }
+
+        .card-shell {
+            max-width: 920px;
+            margin: 0 auto;
+            background: #e6e6e6;
+            border-radius: 18px;
+            padding: 28px 38px 38px;
+            box-shadow: 0 10px 32px rgba(0,0,0,.12);
+            position: relative;
+        }
+
+        .brand-top {
+            position: absolute;
+            right: 26px;
+            top: 20px;
+        }
+
+            .brand-top img {
+                height: 56px;
+                display: block;
+            }
+        .brand-top {
+            position: absolute;
+            right: 24px;
+            top: 18px;
+            color: #2c7d97;
+            font-weight: 700;
+        }
+
+        .title-main {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 800;
+            margin: 8px 0 18px;
+            color: #3A869F;
+            letter-spacing: .5px;
+        }
+
+        .form-grid {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            color: #2e3d47;
+            margin-bottom: 6px;
+        }
+
+        input[type=text], input[type=tel] {
+            width: 100%;
+            height: 38px;
+            border-radius: 8px;
+            border: 1px solid #cfcfcf;
+            background: #fff;
+            color: #333;
+            padding: 8px 12px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .btn-save {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+            height: 44px;
+            padding: 0 22px;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 700;
+            background: #3d7df2;
+            cursor: pointer;
+            box-shadow: 0 3px 0 rgba(0,0,0,.25);
+            transition: transform .05s ease, background .15s ease;
+        }
+
+            .btn-save:hover {
+                background: #2e6be0;
+            }
+
+        .text-danger {
+            color: #b33a3a;
+            font-size: .95rem;
+        }
+
+      
+        .input-error {
+            border: 2px solid #b33a3a !important;
+            background-color: #ffeaea !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-cover">
+        <div class="card-shell">
+            <div class="brand-top">
+                <img src="~/images/Vetex-removebg-preview.png" alt="Vetex" />
+            </div>
+
+            <h1 class="title-main">Registro de dueño</h1>
+
+            <div class="form-grid">
+                <form asp-action="Registro_Dueno" method="post" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label asp-for="nombre">Nombre:</label>
+                        <input asp-for="nombre" type="text" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="telefono">Teléfono:</label>
+                        <input asp-for="telefono"
+                               type="tel"
+                               inputmode="numeric"
+                               maxlength="9"
+                               pattern="^\d{4}-\d{4}$"
+                               title="Formato requerido: 7299-7039"
+                               placeholder="0000-0000"
+                               data-format="phone"
+                               required />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="dui">DUI:</label>
+                        <input asp-for="dui"
+                               type="text"
+                               inputmode="numeric"
+                               maxlength="10"
+                               pattern="^\d{8}-\d$"
+                               title="Formato requerido: 01234567-8"
+                               placeholder="00000000-0"
+                               data-format="dui"
+                               required />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="direccion">Dirección:</label>
+                        <input asp-for="direccion" type="text" required />
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn-save">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+   
+    <script>
+        function formatWithHyphen(el, cutIndex, maxDigits) {
+            const digits = el.value.replace(/\D/g, '').slice(0, maxDigits);
+            el.value = digits.length > cutIndex
+                ? digits.slice(0, cutIndex) + '-' + digits.slice(cutIndex)
+                : digits;
+        }
+
+        const form = document.querySelector("form");
+
+       
+        form.querySelectorAll('input[data-format="phone"]').forEach(inp => {
+            inp.addEventListener('input', () => formatWithHyphen(inp, 4, 8));
+            inp.addEventListener('blur', () => {
+                if (!/^\d{4}-\d{4}$/.test(inp.value))
+                    inp.setCustomValidity('Formato requerido: 7299-7039');
+                else inp.setCustomValidity('');
+            });
+            inp.addEventListener('focus', () => inp.setCustomValidity(''));
+        });
+
+        form.querySelectorAll('input[data-format="dui"]').forEach(inp => {
+            inp.addEventListener('input', () => formatWithHyphen(inp, 8, 9));
+            inp.addEventListener('blur', () => {
+                if (!/^\d{8}-\d$/.test(inp.value))
+                    inp.setCustomValidity('Formato requerido: 01234567-8');
+                else inp.setCustomValidity('');
+            });
+            inp.addEventListener('focus', () => inp.setCustomValidity(''));
+        });
+
+        
+        form.addEventListener("submit", function (e) {
+            let valid = true;
+            let messages = [];
+
+            this.querySelectorAll("input[required]").forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    messages.push(`• ${input.previousElementSibling.innerText.replace(':','')}`);
+                    input.classList.add("input-error");
+                } else {
+                    input.classList.remove("input-error");
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+                alert("⚠️ Debe completar todos los campos obligatorios:\n\n" + messages.join("\n"));
+            }
+        });
+    </script>
+</body>
+</html>
