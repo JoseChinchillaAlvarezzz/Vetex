@@ -1,0 +1,113 @@
+﻿@model Vetex.Models.RegistroDetalleVM
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Registro Clínico Completo</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #2b90b6;
+        }
+
+        .panel {
+            max-width: 1000px;
+            background: #e3e3e3;
+            margin: 24px auto;
+            border-radius: 14px;
+            padding: 18px
+        }
+
+        .field {
+            background: #f3f3f3;
+            border-radius: 6px;
+            padding: .45rem .6rem
+        }
+
+        .label {
+            width: 220px
+        }
+
+        .row + .row {
+            margin-top: .6rem
+        }
+
+        .btn-closex {
+            background: #5aa9e6;
+            border: none;
+            padding: .5rem 1.6rem
+        }
+
+        .pill {
+            background: #eef6ff;
+            border-radius: 10px;
+            padding: .35rem .6rem;
+            margin-bottom: .35rem
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h5 class="fw-semibold mb-1">Registro Clínico</h5>
+        <div class="text-muted mb-3">@Model.Dueno – @Model.Mascota (Reg. #@Model.RegistroId)</div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Reseña:</div>
+            <div class="col"><div class="field">@Model.Resena</div></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Motivo:</div>
+            <div class="col"><div class="field">@Model.Motivo</div></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Signos:</div>
+            <div class="col">
+                <div class="field" style="white-space:pre-line">
+                    Temperatura: @Model.Temperatura °C
+                    Pulso: @Model.Pulso
+                    Respiración: @Model.Respiracion
+                    Deshidratación: @Model.Deshidratacion
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 label fw-semibold">Diagnóstico:</div>
+            <div class="col"><div class="field">@Model.Diagnostico</div></div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-3 label fw-semibold">Prescripciones:</div>
+            <div class="col">
+                @if (Model.Prescripciones.Any())
+                {
+                    @foreach (var p in Model.Prescripciones)
+                    {
+                        <div class="pill d-flex justify-content-between align-items-center">
+                            <span>@p.Medicamento — @p.Frecuencia</span>
+                            <b>@p.Cantidad u.</b>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-muted">Sin prescripciones.</div>
+                }
+            </div>
+        </div>
+
+        <div class="text-center mt-3">
+            <a class="btn btn-closex"
+               asp-action="History"
+               asp-route-duenoId="@Model.DuenoId"
+               asp-route-mascotaId="@Model.MascotaId">Cerrar</a>
+        </div>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
