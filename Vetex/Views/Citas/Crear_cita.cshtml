@@ -1,317 +1,357 @@
-﻿@{
+﻿@model Vetex.Models.CrearCitaVM
+@{
     ViewData["Title"] = "Nueva cita";
-    var hoy = DateTime.Today;
+    var hoy = Model.Fecha;
 }
 
-<style>
-    .page-wrap {
-        background: #2b9ed9;
-        padding: 14px;
-        border-radius: 16px;
-        max-width: 1100px;
-        margin: auto;
-    }
 
-    .card-wrap {
-        background: #e9e9e9;
-        border-radius: 12px;
-        padding: 22px;
-        position: relative;
-    }
+<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
-    /* Encabezado con logo a la derecha (deja espacio para la imagen) */
-    .header-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
+<form asp-action="Crear_cita" method="post" class="create-wrap">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="MascotaId" />
+    <input type="hidden" asp-for="TipoCitaId" />
 
-    .logo-box {
-        width: 80px;
-        height: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    <div class="frame">
+        <div class="panel">
 
-        .logo-box img {
-            max-height: 60px;
-            max-width: 80px;
-        }
+           
+            <div class="top-row">
+                <div class="search-col">
+                    <div class="field">
+                        <label>Dueño:</label>
+                        <div class="searchbox">
+                            <input id="txtBusqueda" class="input" type="text" placeholder="Buscar dueño o mascota..." autocomplete="off" />
+                            <button type="button" id="btnBuscar" class="icon-btn" title="Buscar">🔎</button>
+                        </div>
+                    </div>
 
-    /* Inputs dueño/mascota */
-    .label-strong {
-        font-weight: 800;
-        font-size: 1.05rem;
-        color: #1e1e1e;
-    }
+                    <div class="field">
+                        <label>Mascota:</label>
+                        <div class="searchbox">
+                            <input id="txtMascotaSolo" class="input" type="text" placeholder="(opcional) Filtrar por mascota..." autocomplete="off" />
+                            <button type="button" id="btnBuscarMascota" class="icon-btn" title="Buscar mascota">🔎</button>
+                        </div>
+                    </div>
 
-    .search-group {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+                    <div id="results" class="results"></div>
 
-    .search-input {
-        background: #fff;
-        border: 2px solid #cfcfcf;
-        border-radius: 6px;
-        padding: 8px 10px;
-        width: 300px;
-    }
-
-    .icon-btn {
-        border: none;
-        background: #2b9ed9;
-        color: #fff;
-        border-radius: 8px;
-        padding: 8px 10px;
-        font-weight: 600;
-    }
-
-        .icon-btn:hover {
-            filter: brightness(.95);
-        }
-
-    /* Título central */
-    .hero-title {
-        font-weight: 800;
-        font-size: 1.6rem;
-        text-align: center;
-        margin-top: 6px;
-        color: #232323;
-    }
-
-    /* Selector de tipo de cita */
-    .tipo-wrap {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin: 10px 0 6px;
-    }
-
-    .tipo-chip {
-        border: 2px solid #a5a5a5;
-        background: #f5f5f5;
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        user-select: none;
-    }
-
-        .tipo-chip.active {
-            background: #2b9ed9;
-            border-color: #2b9ed9;
-            color: #fff;
-        }
-
-    /* Bloque “Selección de hora” */
-    .subcard {
-        background: #eae2e7;
-        border-radius: 12px;
-        padding: 12px;
-        text-align: center;
-        margin: 8px auto 14px;
-        max-width: 480px;
-    }
-
-        .subcard small {
-            color: #5a5a5a;
-            font-weight: 600;
-        }
-
-    /* Grilla principal */
-    .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-top: 10px;
-    }
-
-    /* Calendario (usa input date vestido como tarjeta) */
-    .calendar-card {
-        background: #f6f2f6;
-        border-radius: 14px;
-        padding: 16px;
-        border: 1px solid #ddd;
-    }
-
-        .calendar-card .date-label {
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-    .date-input {
-        width: 100%;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #cfcfcf;
-        background: #fff;
-    }
-
-    /* Panel horarios */
-    .horas-card {
-        background: #f6f2f6;
-        border-radius: 20px;
-        padding: 16px;
-        border: 1px solid #ddd;
-    }
-
-    .horas-list {
-        list-style: none;
-        margin: 0;
-        padding: 0 8px;
-        max-height: 470px;
-        overflow: auto;
-    }
-
-    .hora-item {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        padding: 8px 6px;
-        border-bottom: 1px solid #ececec;
-        font-weight: 600;
-        color: #303030;
-    }
-
-        .hora-item:last-child {
-            border-bottom: none;
-        }
-
-    .hora-check {
-        width: 18px;
-        height: 18px;
-    }
-
-    /* Botón agendar */
-    .actions {
-        margin-top: 16px;
-    }
-
-    .btn-agendar {
-        background: #2b9ed9;
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        padding: 12px 20px;
-        font-weight: 700;
-        min-width: 180px;
-    }
-
-        .btn-agendar:hover {
-            filter: brightness(.95);
-        }
-
-   
-
-    {
-        grid-template-columns: 1fr;
-    }
-
-    .search-input {
-        width: 100%;
-    }
-
-    }
-</style>
-
-<div class="page-wrap">
-    <div class="card-wrap">
-
-        <div class="header-row">
-            <!-- Inputs dueño / mascota -->
-            <div>
-                <div class="search-group mb-2">
-                    <label class="label-strong me-2">Dueño:</label>
-                    <input class="search-input" type="text" placeholder="Buscar dueño..." />
-                    <button type="button" class="icon-btn">🔍</button>
+                    <div class="picked">
+                        <span class="picked-label">Seleccionado:</span>
+                        <span id="lblSeleccion" class="picked-value">(ninguno)</span>
+                        <span asp-validation-for="MascotaId" class="text-danger ms-2"></span>
+                    </div>
                 </div>
-                <div class="search-group">
-                    <label class="label-strong me-2">Mascota:</label>
-                    <input class="search-input" type="text" placeholder="Buscar mascota..." />
-                    <button type="button" class="icon-btn">🔍</button>
+
+                <div class="title-col">
+                    <h2>Que Necesitas Hoy</h2>
+                    <div class="chips">
+                        @foreach (var t in Model.Tipos)
+                        {
+                            <div class="chip @(Model.TipoCitaId==t.Id?"active":"")" data-id="@t.Id">@t.Texto</div>
+                        }
+                    </div>
+                    <span asp-validation-for="TipoCitaId" class="text-danger"></span>
+                </div>
+
+                <div class="brand-col">
+                    <div class="brand">Vetex</div>
                 </div>
             </div>
 
-            <div class="hero-title">Que Necesitas Hoy</div>
-
-            <!-- Espacio del logo (coloca tu imagen en wwwroot/images/logo.png) -->
-            <div class="logo-box">
-                <img src="~/images/logo.png" alt="Logo Vetex" />
-            </div>
-        </div>
-
-        <!-- Selector de tipo de cita -->
-        <div class="tipo-wrap">
-            <div class="tipo-chip active" data-tipo="Consulta General">Consulta General</div>
-            <div class="tipo-chip" data-tipo="Cirugía">Cirugía</div>
-            <div class="tipo-chip" data-tipo="Aseo">Aseo</div>
-        </div>
-
-        <!-- Subtítulo Selección de hora -->
-        <div class="subcard">
-            <div style="font-weight:800;">Selección de hora</div>
-            <small id="lblFechaSub">Mostrando horarios para el @hoy.ToString("d 'de' MMMM 'de' yyyy")</small>
-        </div>
-
-        <div class="grid">
-            <!-- Columna izquierda: calendario “tarjeta” + botón -->
-            <div>
-                <div class="calendar-card mb-3">
-                    <div class="date-label">Fecha</div>
-                    <input id="fecha" class="date-input" type="date" value="@hoy.ToString("yyyy-MM-dd")" />
-                </div>
-
-                <div class="actions">
-                    <button type="button" class="btn-agendar">Agendar cita</button>
-                </div>
+            <!-- Subtítulo selección de hora -->
+            <div class="subcard">
+                <div class="sub-title">Selección de hora</div>
+                <small id="lblFechaSub">Mostrando los horarios para el @hoy.ToString("d 'de' MMMM 'de' yyyy")</small>
             </div>
 
-            <!-- Columna derecha: lista de horas -->
-            <div>
-                <div class="horas-card">
-                    <ul class="horas-list">
-                        <!-- Mismo set de horas del mockup; usa checkbox para permitir una selección (puedes cambiar a radio si quieres una sola) -->
-                        <li class="hora-item"><span>8:00 AM</span> <input class="hora-check" type="radio" name="hora" value="08:00" /></li>
-                        <li class="hora-item"><span>10:00 AM</span> <input class="hora-check" type="radio" name="hora" value="10:00" /></li>
-                        <li class="hora-item"><span>12:00 AM</span> <input class="hora-check" type="radio" name="hora" value="00:00" /></li>
-                        <li class="hora-item"><span>1:00 PM</span> <input class="hora-check" type="radio" name="hora" value="13:00" /></li>
-                        <li class="hora-item"><span>2:00 PM</span> <input class="hora-check" type="radio" name="hora" value="14:00" /></li>
-                        <li class="hora-item"><span>2:30 PM</span> <input class="hora-check" type="radio" name="hora" value="14:30" /></li>
-                        <li class="hora-item"><span>3:00 PM</span> <input class="hora-check" type="radio" name="hora" value="15:00" /></li>
-                        <li class="hora-item"><span>3:30 PM</span> <input class="hora-check" type="radio" name="hora" value="15:30" /></li>
-                        <li class="hora-item"><span>4:00 PM</span> <input class="hora-check" type="radio" name="hora" value="16:00" /></li>
-                    </ul>
+            <!-- Cuerpo principal: calendario (izq) / horas (der) -->
+            <div class="grid">
+                <!-- IZQUIERDA -->
+                <div class="left">
+                    <!-- “Calendario” con input date -->
+                    <div class="calendar">
+                        <div class="calendar-head">
+                            <div class="calendar-title">@hoy.ToString("ddd, MMM dd")</div>
+                        </div>
+                        <div class="calendar-body">
+                            <input asp-for="Fecha" id="fecha" type="date" class="date-input" />
+                        </div>
+                        <span asp-validation-for="Fecha" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Agendar cita</button>
+                </div>
+
+                <!-- DERECHA -->
+                <div class="right">
+                    <div class="hours-card">
+                        <ul class="hours-list">
+                            @foreach (var h in Model.Horas)
+                            {
+                                <li class="hour-row">
+                                    <span class="hour-text">@h.Texto</span>
+                                    <input class="hour-radio" type="radio" name="HoraCitaId" value="@h.Id" @(Model.HoraCitaId == h.Id ? "checked" : "") />
+                                </li>
+                            }
+                        </ul>
+                        <span asp-validation-for="HoraCitaId" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
+</form>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
-        // Cambiar “chip” activo de tipo de cita
-        document.querySelectorAll('.tipo-chip').forEach(el => {
-            el.addEventListener('click', () => {
-                document.querySelectorAll('.tipo-chip').forEach(x => x.classList.remove('active'));
-                el.classList.add('active');
+        // =================== Utilidades ===================
+        function formatLatinDateLocal(yyyyMMdd) {
+            if (!yyyyMMdd) return '';
+            const [y, m, d] = yyyyMMdd.split('-').map(Number);
+            // Crear fecha en hora local (no UTC)
+            const date = new Date(y, m - 1, d);
+            return date.toLocaleDateString('es-SV', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
             });
+        }
+
+        const buscarUrl = '@Url.Action("Buscar", "Citas")';
+
+        const fechaInput        = document.getElementById('fecha');
+        const lblFechaSub       = document.getElementById('lblFechaSub');
+        const chips             = document.querySelectorAll('.chip');
+        const hiddenTipo        = document.querySelector('input[name="TipoCitaId"]');
+        const hiddenMascota     = document.querySelector('input[name="MascotaId"]');
+        const radiosHora        = document.querySelectorAll('input[name="HoraCitaId"]');
+        const txtBusqueda       = document.getElementById('txtBusqueda');
+        const txtMascotaSolo    = document.getElementById('txtMascotaSolo');
+        const btnBuscar         = document.getElementById('btnBuscar');
+        const btnBuscarMascota  = document.getElementById('btnBuscarMascota');
+        const results           = document.getElementById('results');
+        const lblSeleccion      = document.getElementById('lblSeleccion');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const activeChip = document.querySelector('.chip.active');
+            if (activeChip && hiddenTipo)
+                hiddenTipo.value = activeChip.getAttribute('data-id');
+
+            if (radiosHora && radiosHora.length > 0) {
+                const checked = Array.from(radiosHora).some(r => r.checked);
+                if (!checked) radiosHora[0].checked = true;
+            }
+
+            if (fechaInput && lblFechaSub && fechaInput.value) {
+                lblFechaSub.textContent = 'Mostrando los horarios para el ' +
+                    formatLatinDateLocal(fechaInput.value);
+            }
         });
 
-        // Actualiza el texto de “Mostrando horarios para …” al cambiar la fecha
-        const fecha = document.getElementById('fecha');
-        const lbl = document.getElementById('lblFechaSub');
-
-        function formatLatinDate(dateStr){
-            const d = new Date(dateStr);
-            const fmt = new Intl.DateTimeFormat('es-SV', { day:'numeric', month:'long', year:'numeric' });
-            return fmt.format(d);
+        if (chips && chips.length > 0) {
+            chips.forEach(ch => {
+                ch.addEventListener('click', () => {
+                    chips.forEach(x => x.classList.remove('active'));
+                    ch.classList.add('active');
+                    if (hiddenTipo) hiddenTipo.value = ch.getAttribute('data-id');
+                });
+            });
         }
-        fecha.addEventListener('change', () => {
-            lbl.textContent = 'Mostrando horarios para el ' + formatLatinDate(fecha.value);
+
+        // ---------- FECHA sin desfase ----------
+        if (fechaInput && lblFechaSub) {
+            fechaInput.addEventListener('change', () => {
+                if (fechaInput.value) {
+                    lblFechaSub.textContent = 'Mostrando los horarios para el ' +
+                        formatLatinDateLocal(fechaInput.value);
+                }
+            });
+        }
+
+        // --- Autocomplete y demás funciones (no toques esto, sigue igual) ---
+        function renderResults(items) {
+            if (!results) return;
+            if (!items || items.length === 0) {
+                results.innerHTML = '<div class="row empty">Sin resultados</div>';
+                results.style.display = 'block';
+                return;
+            }
+            results.innerHTML = items.map(it => `
+                <div class="row" data-id="${it.id}" data-text="${it.texto}">
+                    ${it.texto}
+                </div>
+            `).join('');
+            results.style.display = 'block';
+            results.querySelectorAll('.row').forEach(r => {
+                r.addEventListener('click', () => {
+                    if (hiddenMascota) hiddenMascota.value = r.getAttribute('data-id');
+                    if (lblSeleccion) lblSeleccion.textContent = r.getAttribute('data-text');
+                    results.style.display = 'none';
+                });
+            });
+        }
+
+        function buscar(q) {
+            if (!results) return;
+            if (!q || q.trim().length === 0) {
+                results.style.display = 'none';
+                results.innerHTML = '';
+                return;
+            }
+            fetch(`${buscarUrl}?q=${encodeURIComponent(q)}`)
+                .then(resp => resp.json())
+                .then(renderResults)
+                .catch(() => {
+                    results.innerHTML = '<div class="row error">Error al buscar</div>';
+                    results.style.display = 'block';
+                });
+        }
+
+        let t1 = null, t2 = null;
+        if (txtBusqueda) txtBusqueda.addEventListener('input', () => { clearTimeout(t1); t1 = setTimeout(() => buscar(txtBusqueda.value), 250); });
+        if (txtMascotaSolo) txtMascotaSolo.addEventListener('input', () => { clearTimeout(t2); t2 = setTimeout(() => buscar(txtMascotaSolo.value), 250); });
+        if (btnBuscar) btnBuscar.addEventListener('click', () => buscar(txtBusqueda.value));
+        if (btnBuscarMascota) btnBuscarMascota.addEventListener('click', () => buscar(txtMascotaSolo.value));
+
+        document.addEventListener('click', (e) => {
+            if (!results) return;
+            const fuera = !results.contains(e.target)
+                && e.target !== txtBusqueda && e.target !== txtMascotaSolo
+                && e.target !== btnBuscar && e.target !== btnBuscarMascota;
+            if (fuera) results.style.display = 'none';
         });
     </script>
 }
+
+
+
+
+
+
+
+<style>
+    :root{
+        --brand:#2b9ed9;
+        --bg:#d9d9d9;
+        --panel:#e0e0e0;
+        --card:#f6f2f6;
+        --text:#1a1a1a;
+        --muted:#666;
+        --border:#cfcfcf;
+    }
+    .create-wrap{ margin:0; }
+
+    /* Marco azul y panel gris como el mockup */
+    .frame{
+        max-width:1100px;
+        margin:24px auto;
+        background:var(--brand);
+        padding:18px;
+        border-radius:16px;
+    }
+    .panel{
+        background:var(--panel);
+        border-radius:14px;
+        padding:18px;
+        position:relative;
+    }
+
+    /* Fila superior */
+    .top-row{
+        display:grid;
+        grid-template-columns: 340px 1fr 120px;
+        gap:18px;
+        align-items:center;
+    }
+
+    .search-col .field{ margin-bottom:10px; }
+    .search-col label{
+        display:block;
+        font-weight:800;
+        color:#222;
+        margin-bottom:6px;
+    }
+    .searchbox{ display:flex; align-items:center; gap:8px; }
+    .input{
+        background:#fff; border:2px solid var(--border); border-radius:6px;
+        padding:8px 10px; width:100%;
+    }
+    .icon-btn{
+        border:none; background:var(--brand); color:#fff; border-radius:8px;
+        padding:8px 10px; font-weight:700; cursor:pointer;
+    }
+    .icon-btn:hover{ filter:brightness(.95); }
+
+    .results{
+        display:none; background:#fff; border:1px solid #ddd; border-radius:8px;
+        max-height:220px; overflow:auto; margin-top:8px;
+    }
+    .results .row{ padding:8px 10px; cursor:pointer; border-bottom:1px solid #eee; }
+    .results .row:hover{ background:#f5faff; }
+    .results .row.empty{ color:var(--muted); cursor:default; }
+    .results .row.error{ color:#b00020; cursor:default; }
+
+    .picked{ margin-top:8px; }
+    .picked-label{ font-weight:800; color:#222; }
+    .picked-value{ font-weight:700; margin-left:6px; color:#222; }
+
+    .title-col{ text-align:center; }
+    .title-col h2{ margin:0; font-weight:800; }
+    .chips{ display:flex; gap:10px; justify-content:center; margin-top:8px; flex-wrap:wrap; }
+    .chip{
+        border:2px solid #a5a5a5; background:#f5f5f5; padding:6px 12px;
+        border-radius:8px; font-weight:600; cursor:pointer; user-select:none;
+    }
+    .chip.active{ background:var(--brand); border-color:var(--brand); color:#fff; }
+
+    .brand-col{ display:flex; justify-content:center; }
+    .brand{ font-weight:800; font-size:22px; color:var(--brand); }
+
+    .subcard{
+        background:#eae2e7; border-radius:12px; padding:12px;
+        text-align:center; margin:12px auto 16px; max-width:520px;
+    }
+    .sub-title{ font-weight:800; margin-bottom:4px; }
+    .subcard small{ color:#5a5a5a; font-weight:600; }
+
+    /* Grid principal */
+    .grid{
+        display:grid; grid-template-columns: 360px 1fr; gap:24px;
+    }
+
+    /* Calendario estilo tarjeta */
+    .calendar{
+        background:#ffffff; border-radius:14px; padding:14px; border:1px solid #ddd;
+        box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
+        margin-bottom:14px;
+    }
+    .calendar-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .calendar-title{ font-weight:700; color:#333; }
+    .date-input{
+        width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:#fff;
+        font-weight:600;
+    }
+
+    .btn-primary{
+        background:var(--brand); color:#fff; border:none; border-radius:10px;
+        padding:12px 20px; font-weight:700; min-width:180px;
+    }
+    .btn-primary:hover{ filter:brightness(.95); }
+
+    /* Horas a la derecha */
+    .hours-card{
+        background:#fff; border-radius:20px; padding:16px; border:1px solid #ddd;
+    }
+    .hours-list{ list-style:none; margin:0; padding:0 8px; max-height:470px; overflow:auto; }
+    .hour-row{
+        display:grid; grid-template-columns: 1fr auto; align-items:center;
+        padding:10px 6px; border-bottom:1px solid #ececec; font-weight:600; color:#303030;
+    }
+    .hour-row:last-child{ border-bottom:none; }
+    .hour-radio{ width:18px; height:18px; }
+    .hour-text{ user-select:none; }
+
+</style>
