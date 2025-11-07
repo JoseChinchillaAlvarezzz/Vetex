@@ -21,17 +21,26 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item mx-3">
-                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="Home" asp-action="Index">Registros Clinicos</a>
+                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="Registro" asp-action="Index">Registros Clinicos</a>
                         </li>
                         <li class="nav-item mx-3">
-                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="Home" asp-action="Privacy">Menu Citas</a>
+                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="Citas" asp-action="Index">Menu Citas</a>
                         </li>
                         <li class="nav-item mx-3">
-                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="Home" asp-action="Privacy">Gestion de Clientes</a>
+                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="Clientes" asp-action="Index">Gestion de Clientes</a>
                         </li>
                         <li class="nav-item mx-3">
-                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="Home" asp-action="Privacy">Panel de Operacion</a>
+                            <a class="nav-link text-white fw-bold fs-5" asp-area="" asp-controller="inventario" asp-action="Index">Panel de Operacion</a>
                         </li>
+                        <li class="nav-item mx-3">
+                            <form asp-controller="Login" asp-action="Logout" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger fw-bold fs-5">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>
