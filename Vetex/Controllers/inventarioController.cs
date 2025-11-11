@@ -130,7 +130,8 @@ namespace Vetex.Controllers
                                           {
                                               id = p.id,
                                               precio = m.precio,
-                                              cantidad = p.cantidad
+                                              cantidad = p.cantidad, 
+                                              medicamento_id = m.id
                                           }).ToList();
 
                     foreach (var p in prescripciones) 
@@ -143,6 +144,17 @@ namespace Vetex.Controllers
                         };
 
                         _context.detallefactura.Add(detalle);
+
+                        var medicamento = (from m in _context.medicamentos
+                                           where m.id == p.medicamento_id
+                                           select m).FirstOrDefault();
+
+                        if (medicamento != null) 
+                        {
+                            medicamento.stock -= p.cantidad;
+
+                            if (medicamento.stock < 0) medicamento.stock = 0;
+                        }
                     }
 
                     await _context.SaveChangesAsync();
