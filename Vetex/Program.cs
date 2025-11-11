@@ -16,6 +16,9 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthorization();
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
