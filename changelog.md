@@ -24,3 +24,16 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ### Changed
 
 ### Removed
+
+## [0.2.0] - 2025-11-6
+### Added
+- Se integró la función del Login con el resto del proyecto.  
+- Se culminó el trabajo en el módulo **Clientes**, dejandolo listo para salir a producción.  
+- Se culminó el trabajo en el módulo **Citas**, dejandolo listo para salir a producción.  
+- Se culminó el trabajo en el módulo **Registro**, dejandolo listo para salir a producción.
+- Se creó el controlador del módulo **Inventario** y se desarrolló toda la lógica a implementar en él.
+
+### Changed
+
+### Removed
+
