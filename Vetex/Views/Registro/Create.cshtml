@@ -183,18 +183,17 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Días:</label>
-                        <input id="medDays" type="number" min="1" class="form-control" value="5" />
+                        <label class="form-label fw-semibold">Dosis (texto o frecuencia):</label>
+                        <input id="medDosis" type="text" class="form-control" placeholder="Ejemplo: 1 tableta cada 8 horas" />
                     </div>
 
-                    <div class="mb-1">
-                        <label class="form-label">Horas entre dosis:</label>
-                        <select id="medDose" class="form-select">
-                            <option>8</option>
-                            <option>12</option>
-                            <option selected>24</option>
-                        </select>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Cantidad (unidades físicas):</label>
+                        <input id="medCantidad" type="number" min="1" class="form-control"
+                               placeholder="Ejemplo: 1 frasco, 2 cajas, 3 tubos..." required />
+                        <div class="form-text">El doctor escribe la cantidad de unidades físicas que se entregan.</div>
                     </div>
+
                 </div>
 
                 <div class="modal-footer">
@@ -238,18 +237,24 @@
 
                 if (!medId) { alert('Selecciona un medicamento del catálogo.'); return; }
 
-                const days = parseInt((daysEl && daysEl.value) ? daysEl.value : '0', 10);
-                const dose = parseInt((doseEl && doseEl.value) ? doseEl.value : '0', 10);
+                const dosisEl = document.getElementById('medDosis');
+                const cantidadEl = document.getElementById('medCantidad');
 
-                if (!days || !dose) { alert('Ingresa días y horas entre dosis válidos.'); return; }
+                const dosis = dosisEl ? dosisEl.value.trim() : "";
+                const cantidad = parseInt((cantidadEl && cantidadEl.value) ? cantidadEl.value : "0", 10);
 
-                const cantidad = Math.ceil((24 / dose) * days); // redondeo hacia arriba
+                if (!cantidad || cantidad <= 0) {
+                    alert("Ingrese la cantidad de unidades físicas (blisters, tubos, frascos, etc).");
+                    return;
+                }
+
 
                 // Visual (pill)
                 const pill = document.createElement('div');
                 pill.className = 'pill d-flex justify-content-between align-items-center gap-2';
-                pill.innerHTML = `<span>${medText} • c/${dose}h × ${days}d — <b>${cantidad}</b> u.</span>
-                                  <button type="button" class="btn btn-sm btn-link text-danger p-0">Quitar</button>`;
+                pill.innerHTML = `<span>${medText} — ${dosis} — <b>${cantidad}</b> u.</span>
+                  <button type="button" class="btn btn-sm btn-link text-danger p-0">Quitar</button>`;
+
                 document.getElementById('medList').appendChild(pill);
 
                 // Inputs ocultos que viajan al servidor
@@ -257,8 +262,9 @@
                 const wrap = document.createElement('div');
                 wrap.dataset.index = medIndex;
                 wrap.appendChild(addHidden(`Medicamentos[${medIndex}].MedicamentoId`, medId));
+                wrap.appendChild(addHidden(`Medicamentos[${medIndex}].Dosis`, dosis));
                 wrap.appendChild(addHidden(`Medicamentos[${medIndex}].Cantidad`, cantidad));
-                wrap.appendChild(addHidden(`Medicamentos[${medIndex}].DosisHoras`, dose));
+
                 container.appendChild(wrap);
 
                 // Quitar
@@ -276,8 +282,9 @@
 
                 // Reset
                 sel.value = '';
-                if (daysEl) daysEl.value = '5';
-                if (doseEl) doseEl.value = '24';
+                if (dosisEl) dosisEl.value = '';
+                if (cantidadEl) cantidadEl.value = '';
+
             });
         });
     </script>

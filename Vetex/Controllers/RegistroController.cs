@@ -198,43 +198,17 @@ namespace Vetex.Controllers
                 foreach (var item in model.Medicamentos)
                 {
                     if (!medsValidos.Contains(item.MedicamentoId)) continue;
-                  
-                    var dosisTxt = item.DosisHoras.ToString();
-
-                    var frecuenciaId = await _context.frecuencias
-                        .Where(f =>
-                            f.frecuencia == dosisTxt ||                               // "8"
-                            f.frecuencia == $"c/{dosisTxt}h" ||                       // "c/8h"
-                            f.frecuencia == $"cada {dosisTxt} horas" ||               // "cada 8 horas"
-                            f.frecuencia == $"q{dosisTxt}h" ||                        // "q8h"
-                            f.frecuencia.Contains($"{dosisTxt}")                      // contiene "8"
-                        )
-                        .Select(f => f.id)
-                        .FirstOrDefaultAsync();
-
-                    if (frecuenciaId == 0)
-                    {
-                        ModelState.AddModelError(string.Empty,
-                            $"No existe una frecuencia en la tabla 'frecuencias' que coincida con {item.DosisHoras} horas. " +
-                            $"Agrega filas como 'c/{item.DosisHoras}h' o 'cada {item.DosisHoras} horas'.");
-                        CargarCombos(model.MascotaId, model.PulsoId, model.RespiracionId, model.DeshidratacionId);
-                        ViewBag.Meds = (from m in _context.medicamentos
-                                        join pr in _context.presentacionmedicina on m.presentacion_id equals pr.id
-                                        orderby m.nombre
-                                        select new { id = m.id, texto = m.nombre + " " + m.concentracion + " — " + pr.presentacion })
-                                        .ToList();
-                        return View(model);
-
-                        
-                    }
-
                     _context.prescripcion.Add(new prescripcion
                     {
                         registro_id    = reg.id,
                         medicamento_id = item.MedicamentoId,
-                        cantidad       = item.Cantidad,
-                        frecuencia_id  = frecuenciaId 
+                        dosis          = item.Dosis ?? string.Empty, 
+                        cantidad       = item.Cantidad,              
+                        frecuencia_id  = 1,                          
+                        duracion       = string.Empty,
+                        indicacion     = string.Empty
                     });
+
                 }
 
                 await _context.SaveChangesAsync();
