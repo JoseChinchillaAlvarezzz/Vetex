@@ -14,15 +14,24 @@
     <body class="py-5" style="background-color:#3D90B9">
 
         <div class="vh-100 d-flex flex-column justify-content-center align-items-center" style="background-color:#D9D9D9">
+
+            <div class="mb-5">
+                <div class="mx-5 mb-5 pb-5">
+                    <a asp-controller="Login" asp-action="menuInicial" class="btn text-light text-center mx-5 mt-4" style="background-color:#3D90B9;">
+                        <-- Volver a la pantalla principal
+                    </a>
+                </div>
+            </div>
+
             <img src="@Url.Content("~/images/Vetex-removebg-preview.png")" alt="Vetex" class="text-center" style="width:150px;" />
 
             <h2 class="mb-5">Panel de operación</h2>
 
-            <div class="d-flex justify-content-between">
-                <a asp-controller="inventario" asp-action="Facturacion" class="btn text-light me-4 px-3" style="background-color:#3D90B9">
+            <div class="d-flex justify-content-between mb-5 pb-5">
+                <a asp-controller="inventario" asp-action="Facturacion" class="btn text-light me-4 px-3 mb-3" style="background-color:#3D90B9">
                     Facturación
                 </a>
-                <a asp-controller="inventario" asp-action="Inventariado" class="btn text-light ms-4 px-3" style="background-color:#3D90B9">
+                <a asp-controller="inventario" asp-action="Inventariado" class="btn text-light ms-4 px-3 mb-3" style="background-color:#3D90B9">
                     Inventariado
                 </a>
             </div>

@@ -14,13 +14,19 @@
             max-width:900px;margin:30px auto;background:#e3e3e3;border-radius:14px;
             padding:28px;box-shadow:0 2px 6px rgba(0,0,0,.15)
         }
-        .btn-vetex{background:#5aa9e6;border:none}
+
+        .btn-vetex {
+            background: #3D90B9;
+            border: none
+            text-color:
+        }
         .btn-vetex:hover{filter:brightness(.95)}
         .logo{width:70px}
         .title{font-weight:700;margin-top:8px}
     </style>
 </head>
 <body>
+
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show text-center fw-semibold" role="alert"
@@ -31,12 +37,19 @@
     }
 
     <div class="card-wrap text-center">
-        <img class="logo mb-2" src="~/images/vetex_logo.png" onerror="this.style.display='none'" />
-        <div class="title mb-4">Vetex</div>
+
+        <div class="mx-5 mb-5 pb-5">
+            <a asp-controller="Login" asp-action="menuInicial" class="btn text-light text-center mx-5 mt-4" style="background-color:#3D90B9;">
+                <-- Volver a la pantalla principal
+            </a>
+        </div>
+
+        <img src="@Url.Content("~/images/Vetex-removebg-preview.png")" alt="Vetex" class="text-center" style="width:150px;" />
+
         <h5 class="fw-semibold mb-4">Registros Clínicos</h5>
         <div class="d-flex gap-3 justify-content-center">
-            <a class="btn btn-vetex px-4" asp-controller="Registro" asp-action="List">Ver registros</a>
-            <a class="btn btn-vetex px-4" asp-controller="Registro" asp-action="Create">Registro nuevo</a>
+            <a class="btn btn-vetex px-4 text-white" asp-controller="Registro" asp-action="List">Ver registros</a>
+            <a class="btn btn-vetex px-4 text-white" asp-controller="Registro" asp-action="Create">Registro nuevo</a>
         </div>
     </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
