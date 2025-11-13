@@ -1,0 +1,293 @@
+﻿@model Vetex.Models.RegistroCreateDTO
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Nuevo Registro</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #2b90b6;
+        }
+
+        .wrap {
+            max-width: 1000px;
+            background: #cfcfcf;
+            margin: 24px auto;
+            border-radius: 14px;
+            padding: 20px
+        }
+
+        .section-title {
+            font-weight: 700;
+            margin: 10px 0
+        }
+
+        .btn-vetex {
+            background: #5aa9e6;
+            border: none
+        }
+
+        .help {
+            font-size: .9rem;
+            color: #666
+        }
+
+        .pill {
+            background: #eef6ff;
+            border-radius: 10px;
+            padding: .35rem .6rem
+        }
+
+        .line {
+            height: 1px;
+            background: #d7d7d7;
+            margin: 12px 0
+        }
+
+        .back-icon {
+            font-size: 1.8rem; /* tamaño del icono */
+            color: black; /* blanco */
+            transition: transform .2s ease, color .2s ease;
+            cursor: pointer;
+        }
+
+            .back-icon:hover {
+                transform: scale(1.12);
+                color: #eaeaea; /* aclarado en hover */
+            }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="d-flex align-items-center mb-3">
+            <a asp-controller="Registro" asp-action="Index" class="text-decoration-none" aria-label="Volver">
+                <i class="bi bi-arrow-left-circle-fill back-icon"></i>
+            </a>
+            <h5 class="fw-semibold mb-0 ms-2 text-dark">Nuevo registro</h5>
+        </div>
+
+        <form asp-action="Create" method="post" id="frmRegistro">
+            @Html.AntiForgeryToken()
+
+            <!-- Mascota -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Mascota (Dueño — Mascota):</label>
+                <select asp-for="MascotaId" class="form-select" asp-items="ViewBag.Mascotas">
+                    <option value="">-- Seleccione --</option>
+                </select>
+                <span asp-validation-for="MascotaId" class="text-danger"></span>
+            </div>
+
+            <!-- Ficha clínica -->
+            <div class="section-title">Ficha clínica</div>
+
+            <div class="mb-2">
+                <label class="form-label fw-semibold">Reseña:</label>
+                <textarea asp-for="Resena" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label fw-semibold">Motivo:</label>
+                <textarea asp-for="Motivo" class="form-control" rows="2"></textarea>
+            </div>
+
+            <div class="row g-2 mb-2">
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Temperatura (°C):</label>
+                    <input asp-for="Temperatura" type="number" class="form-control" step="0.1" min="0" value="38" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Pulso:</label>
+                    <select asp-for="PulsoId" class="form-select" asp-items="ViewBag.Pulsos">
+                        <option value="">-- Seleccione --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Respiración:</label>
+                    <select asp-for="RespiracionId" class="form-select" asp-items="ViewBag.Respiraciones">
+                        <option value="">-- Seleccione --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Deshidratación:</label>
+                    <select asp-for="DeshidratacionId" class="form-select" asp-items="ViewBag.Deshidrataciones">
+                        <option value="">-- Seleccione --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Diagnóstico:</label>
+                <input asp-for="Diagnostico" class="form-control" />
+            </div>
+
+            <div class="line"></div>
+
+            <!-- Medicación -->
+            <div class="mb-2">
+                <label class="form-label fw-semibold">Medicación:</label>
+                <div id="medList" class="d-flex flex-column gap-2 mb-2"></div>
+                <div id="medInputs"></div>
+
+                <button type="button"
+                        class="btn btn-sm btn-vetex"
+                        data-bs-toggle="modal"
+                        data-bs-target="#medModal">
+                    Agregar medicamento
+                </button>
+
+                <div class="help mt-1">
+                    La <b>cantidad</b> se calcula como:
+                    <code>(24 ÷ horas) × días</code>, redondeado hacia arriba.
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button class="btn btn-vetex px-4">Finalizar Registro</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal de Medicamentos -->
+    <div class="modal fade" id="medModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius:14px">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-semibold">Seleccionar medicamento</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Medicamento:</label>
+                        <select id="medCat" class="form-select">
+                            <option value="">-- Seleccione --</option>
+                            @{
+                                var meds = (IEnumerable<dynamic>)(ViewBag.Meds ?? new List<dynamic>());
+                                foreach (var x in meds)
+                                {
+                                    <option value="@x.id">@x.texto</option>
+                                }
+                            }
+                        </select>
+
+                        <!-- DEBUG opcional: muestra cuántos meds cargaron -->
+                        <small class="text-muted">Catálogo cargado: @(((IEnumerable<dynamic>)(ViewBag.Meds ?? new List<dynamic>())).Count()) items</small>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Dosis (texto o frecuencia):</label>
+                        <input id="medDosis" type="text" class="form-control" placeholder="Ejemplo: 1 tableta cada 8 horas" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Cantidad (unidades físicas):</label>
+                        <input id="medCantidad" type="number" min="1" class="form-control"
+                               placeholder="Ejemplo: 1 frasco, 2 cajas, 3 tubos..." required />
+                        <div class="form-text">El doctor escribe la cantidad de unidades físicas que se entregan.</div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btnAddMed" type="button" class="btn btn-primary" style="background:#5aa9e6;border:none">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let medIndex = 0;
+
+            function addHidden(name, value) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                return input;
+            }
+
+            const addBtn = document.getElementById('btnAddMed');
+            if (!addBtn) {
+                console.error('No se encontró #btnAddMed');
+                return;
+            }
+
+            addBtn.addEventListener('click', function () {
+                const sel  = document.getElementById('medCat');
+                const daysEl = document.getElementById('medDays');
+                const doseEl = document.getElementById('medDose');
+
+                if (!sel) { alert('No se encontró el select de medicamentos.'); return; }
+
+                const medId   = sel.value;
+                const medText = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '';
+
+                if (!medId) { alert('Selecciona un medicamento del catálogo.'); return; }
+
+                const dosisEl = document.getElementById('medDosis');
+                const cantidadEl = document.getElementById('medCantidad');
+
+                const dosis = dosisEl ? dosisEl.value.trim() : "";
+                const cantidad = parseInt((cantidadEl && cantidadEl.value) ? cantidadEl.value : "0", 10);
+
+                if (!cantidad || cantidad <= 0) {
+                    alert("Ingrese la cantidad de unidades físicas (blisters, tubos, frascos, etc).");
+                    return;
+                }
+
+
+                // Visual (pill)
+                const pill = document.createElement('div');
+                pill.className = 'pill d-flex justify-content-between align-items-center gap-2';
+                pill.innerHTML = `<span>${medText} — ${dosis} — <b>${cantidad}</b> u.</span>
+                  <button type="button" class="btn btn-sm btn-link text-danger p-0">Quitar</button>`;
+
+                document.getElementById('medList').appendChild(pill);
+
+                // Inputs ocultos que viajan al servidor
+                const container = document.getElementById('medInputs');
+                const wrap = document.createElement('div');
+                wrap.dataset.index = medIndex;
+                wrap.appendChild(addHidden(`Medicamentos[${medIndex}].MedicamentoId`, medId));
+                wrap.appendChild(addHidden(`Medicamentos[${medIndex}].Dosis`, dosis));
+                wrap.appendChild(addHidden(`Medicamentos[${medIndex}].Cantidad`, cantidad));
+
+                container.appendChild(wrap);
+
+                // Quitar
+                pill.querySelector('button').addEventListener('click', () => { pill.remove(); wrap.remove(); });
+
+                medIndex++;
+
+                // Cierra el modal si Bootstrap está cargado
+                const modalEl = document.getElementById('medModal');
+                if (window.bootstrap && bootstrap.Modal.getInstance(modalEl)) {
+                    bootstrap.Modal.getInstance(modalEl).hide();
+                } else if (window.bootstrap) {
+                    new bootstrap.Modal(modalEl).hide();
+                }
+
+                // Reset
+                sel.value = '';
+                if (dosisEl) dosisEl.value = '';
+                if (cantidadEl) cantidadEl.value = '';
+
+            });
+        });
+    </script>
+
+</body>
+</html>

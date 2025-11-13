@@ -1,0 +1,74 @@
+﻿@model Vetex.Models.HistorialVM
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Historial</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #2b90b6;
+        }
+
+        .panel {
+            max-width: 1000px;
+            background: #e3e3e3;
+            margin: 24px auto;
+            border-radius: 12px;
+            padding: 18px
+        }
+
+        .box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px
+        }
+
+        .btn-ver {
+            background: #5aa9e6;
+            border: none
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h5 class="fw-semibold">Registro Clínico</h5>
+        <div class="text-muted mb-3">@Model.Dueno – @Model.Mascota</div>
+
+        <div class="mb-2 fw-semibold">Historial</div>
+        <div class="box">
+            @if (Model.Registros.Any())
+            {
+                @foreach (var r in Model.Registros)
+                {
+                    <div class="row align-items-center py-2">
+                        <div class="col-md-3">Registro @r.RegistroId</div>
+                        <div class="col-md-3">@((r.Fecha?.ToString("dd/MM/yyyy")))</div>
+                        <div class="col-md-4">@r.Diagnostico</div>
+                        <div class="col-md-2 text-end">
+                            <a class="btn btn-sm btn-ver"
+                               asp-action="Details"
+                               asp-route-id="@r.RegistroId"
+                               asp-route-duenoId="@Model.DuenoId"
+                               asp-route-mascotaId="@Model.MascotaId">Ver</a>
+                        </div>
+                    </div>
+                    <hr class="my-2" />
+                }
+            }
+            else
+            {
+                <div class="text-muted">Sin registros.</div>
+            }
+        </div>
+
+        <div class="mt-3">
+            <a class="btn btn-link" asp-action="List">← Volver</a>
+        </div>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

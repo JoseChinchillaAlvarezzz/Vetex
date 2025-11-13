@@ -1,0 +1,65 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Facturacion";
+    DateTime fecha = DateTime.Now;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewData["Title"] - Vetex</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body class="pt-5" style="background-color:#3D90B9">
+
+        <div class="d-flex flex-column" style="background-color:#D9D9D9; height: calc(100vh - 3rem); overflow-y:auto;">
+
+            <div class="mx-5">
+                <a asp-controller="inventario" asp-action="Index" class="btn text-light text-center mx-5 mt-4" style="background-color:#3D90B9;">
+                    <-- Volver al panel de operación
+                </a>
+            </div>
+
+            <div class="d-flex justify-content-around pt-3 mb-3">
+                <div class="mt-3">
+                    <h1 class="mb-2">Consultas finalizadas</h1>
+                    <h5 class="mt-2">Pendientes de pago</h5>
+                </div>
+
+                <div class="d-flex align-items-center mt-3">
+                    <h3>@fecha.ToString("dd/MM/yyyy")</h3>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center mt-2 mb-4">
+                <h5 class="me-3"><b>Consultas finalizadas</b></h5>
+                <h5 class="ms-3"><b>Pendientes de pago</b></h5>
+            </div>
+
+            @foreach (var registro in (List<RegistroPendienteViewModel>)ViewData["facturasPendientes"])
+            {
+                <div class="mx-5">
+                    <div class="d-flex justify-content-between bg-light mx-5 py-2 mb-3 border border-dark border-2">
+                        <span class="d-flex align-items-center ps-4 pb-1"># @registro.ID</span>
+                        <span class="d-flex align-items-center pb-1">@registro.Dueno --- @registro.Mascota</span>
+                        
+                        @using (Html.BeginForm("verPrescripciones", "inventario", FormMethod.Get))
+                        {
+                            <input type="hidden" name="idRegistro" value="@registro.ID" />
+                            <button class="btn text-light me-5" style="background-color:#3D90B9">Ver detalle</button>
+                        }
+
+                    </div>
+                </div>
+            }
+
+            <div class="my-4">
+                <span></span>
+            </div>
+
+        </div>
+
+    </body>
+</html>

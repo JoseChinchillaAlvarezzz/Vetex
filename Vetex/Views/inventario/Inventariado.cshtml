@@ -1,0 +1,87 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Inventariado";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewData["Title"] - Vetex</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body class="pt-5" style="background-color:#3D90B9">
+
+        <div class="d-flex flex-column overflow-auto" style="background-color:#D9D9D9; height: calc(100vh - 3rem);">
+
+            <div class="mx-5">
+                <a asp-controller="inventario" asp-action="Index" class="btn text-light text-center mx-5 mt-4" style="background-color:#3D90B9;">
+                    <-- Volver al panel de operación
+                </a>
+            </div>
+
+            <h2 class="text-center mt-4">Inventario de medicamentos</h2>
+
+            <div class="d-flex justify-content-center my-2">
+                <input id="buscador" type="text" class="form-control w-25" style="border: 3px solid #3D90B9" placeholder="Buscar medicamento...">
+            </div>
+
+            <div class="mx-5 mt-5 d-flex justify-content-around">
+                <span class="d-flex align-items-center ms-3 pb-1"><b>Medicamento</b></span>
+                <span class="d-flex align-items-center ms-5 ps-5 pb-1"><b>Presentacion</b></span>
+                <span class="d-flex align-items-center ms-5 ps-2 pb-1"><b>Stock</b></span>
+                <span class="d-flex align-items-center me-3 pe-5"><b>Accion</b></span>
+            </div> 
+
+            <div class="mx-5" id="listaMedicamentos">
+                @foreach (var medicamento in (IEnumerable<dynamic>)ViewData["listaMedicamentos"])
+                {
+                    <div class="mx-5 medicamento-item">
+                        <div class="d-flex align-items-center bg-light mx-5 py-2 mb-3 border border-dark border-2 medicamento-item">
+                            <div class="flex-grow-1 col-5 ms-4 nombre">@medicamento.medicamento</div>
+                            <div class="flex-grow-1 col-3 me-3 presentacion">@medicamento.presentacion</div>
+                            <div class="flex-grow-1 col-2">@medicamento.stock</div>
+                            <div class="flex-grow-1 col-2 ms-2">
+                                @using (Html.BeginForm("detalleMedicamento", "inventario", FormMethod.Get))
+                                {
+                                    <input type="hidden" name="idMed" value="@medicamento.id" />
+                                    <input type="hidden" name="nombre" value="@medicamento.medicamento" />
+                                    <input type="hidden" name="presentacion" value="@medicamento.presentacion" />
+                                    <input type="hidden" name="stockActual" value="@medicamento.stock" />
+                                    <button class="btn text-light" style="background-color:#3D90B9">Ver detalle</button>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const buscador = document.getElementById("buscador");
+                const items = document.querySelectorAll(".medicamento-item");
+
+                buscador.addEventListener("keyup", () => {
+                    const texto = buscador.value.toLowerCase().trim();
+
+                    items.forEach(item => {
+                        const nombre = item.querySelector(".nombre").textContent.toLowerCase();
+                        const presentacion = item.querySelector(".presentacion").textContent.toLowerCase();
+
+                        // Mostrar solo los que coincidan con la búsqueda
+                        if (nombre.includes(texto) || presentacion.includes(texto)) {
+                            item.style.display = "";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </body>
+</html>
