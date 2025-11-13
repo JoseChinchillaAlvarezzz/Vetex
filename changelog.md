@@ -9,7 +9,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 - Inicialización del changelog
 
-## [1.0.0] - 2025-09-12
+## [0.0.0] - 2025-09-12
 - Versión inicial del proyecto
 
 ## [0.1.0] - 2025-09-25
@@ -34,6 +34,17 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Se creó el controlador del módulo **Inventario** y se desarrolló toda la lógica a implementar en él.
 
 ### Changed
+
+### Removed
+
+## [1.0.0] - 2025-11-13
+-Primera versión a ser implementada en prodcción del software Vetex
+
+### Added
+- Comprobación y actualización de stock a la hora de generar facturas.
+
+### Changed
+- Rediseño de interfaces y correcciones en la navegabilidad
 
 ### Removed
 
